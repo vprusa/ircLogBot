@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.hawkular.ircbot</groupId>
+  <artifactId>ircLogBot</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>IRC Log Bot</name>
+  <description>Simple dockerized IRC bot that can store and serve the log of communication on IRC channel</description>
+  <url>http://www.hawkular.org</url>
+
+  <scm>
+    <connection>scm:git:git://github.com/Jiri-Kremser/ircLogBot.git</connection>
+    <developerConnection>scm:git:ssh://github.com/Jiri-Kremser/ircLogBot.git</developerConnection>
+    <url>https://github.com/Jiri-Kremser/ircLogBot</url>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Jiri Kremser</name>
+      <timezone>+2</timezone>
+    </developer>
+  </developers>
+
+  <properties>
+    <version.jira-rest-java-client>3.0.0</version.jira-rest-java-client>
+    <version.jsoup>1.8.2</version.jsoup>
+    <version.maven-assembly-plugin>2.5.5</version.maven-assembly-plugin>
+    <version.maven-source-plugin>2.4</version.maven-source-plugin>
+    <version.pircbotx>2.0.1</version.pircbotx>
+    <version.scala>2.11.7</version.scala>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>${version.scala}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.pircbotx</groupId>
+      <artifactId>pircbotx</artifactId>
+      <version>${version.pircbotx}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>${version.jsoup}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.atlassian.jira</groupId>
+      <artifactId>jira-rest-java-client-api</artifactId>
+      <version>${version.jira-rest-java-client}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.atlassian.jira</groupId>
+      <artifactId>jira-rest-java-client-core</artifactId>
+      <version>${version.jira-rest-java-client}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.5</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>scala-compile-first</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-source</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>scala-test-compile</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- todo: use the shade plugin instead -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${version.maven-assembly-plugin}</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>org.hawkular.ircbot.IrcLogBot</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <!-- this is used for inheritance merges -->
+            <phase>package</phase>
+            <!-- bind to the packaging phase -->
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+<!--
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${version.maven-source-plugin}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+-->
+    </plugins>
+  </build>
+
+   <repositories>
+     <repository>
+       <id>atlassian-public</id>
+       <url>https://m2proxy.atlassian.com/repository/public</url>
+       <snapshots>
+         <enabled>true</enabled>
+         <updatePolicy>daily</updatePolicy>
+         <checksumPolicy>warn</checksumPolicy>
+       </snapshots>
+       <releases>
+         <enabled>true</enabled>
+         <checksumPolicy>warn</checksumPolicy>
+       </releases>
+     </repository>
+   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>jboss.staging</id>
+      <name>JBoss Releases Repository</name>
+      <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+</project>
+
