@@ -1,0 +1,5 @@
+
+```bash
+$docker build --force-rm=true -t ircLogBot
+$docker run -ti -e IRC_SERVER='irc.freenode.net' -e IRC_CHANNEL='#foo' ircLogBot
+```
