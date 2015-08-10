@@ -10,4 +10,4 @@ RUN yum --quiet -y install git httpd crontabs && rm -rf /var/cache/yum \
     && cp src/main/resources/org/hawkular/ircbot/*.sh /root && chmod +x /root/*.sh
 
 EXPOSE 80
-CMD /usr/sbin/httpd && /root/logger.sh& java -jar /opt/ircLogBot/ircLogBot/target/ircLogBot-*-jar-with-dependencies.jar ${IRC_SERVER:="irc.freenode.net"} ${IRC_CHANNEL:="##foo"}
+CMD /usr/sbin/httpd && java -jar /opt/ircLogBot/ircLogBot/target/ircLogBot-*-jar-with-dependencies.jar ${IRC_SERVER:="irc.freenode.net"} ${IRC_CHANNEL:="##foo"}& sleep 10 && /root/logger.sh&
