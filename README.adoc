@@ -1,0 +1,5 @@
+For trying out, just run:
+
+```bash
+docker run -ti -p 80:80 -e IRC_SERVER='irc.freenode.net' -e IRC_CHANNEL='##fooo' jkremser/ircLogBot
+```

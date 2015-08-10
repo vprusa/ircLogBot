@@ -1,12 +1,12 @@
 package org.hawkular.ircbot
 
 
-import java.text.SimpleDateFormat
+import java.net._
 import java.util.regex.Pattern
 
 import org.pircbotx.hooks.ListenerAdapter
-import org.pircbotx.hooks.events.{NickChangeEvent, PrivateMessageEvent}
-import org.pircbotx.hooks.types.GenericMessageEvent
+import org.pircbotx.hooks.events.{MessageEvent, PrivateMessageEvent}
+import org.slf4j.{Logger, LoggerFactory}
 
 
 /**
@@ -15,9 +15,11 @@ import org.pircbotx.hooks.types.GenericMessageEvent
  */
 class IrcBotListener(var server: String, var channel: String) extends ListenerAdapter[IrcLogBot] {
 
-  val JIRA_PROJECT = "foo-";
-  val JIRA_PATTERN = Pattern.compile("(?i)(" + JIRA_PROJECT + "\\d{1,5})");
-  val ECHO_PATTERN = Pattern.compile("(?i)echo[ ]+(.+)");
+  val logger: Logger = LoggerFactory.getLogger(this.getClass.getName)
+
+  val JIRA_PROJECT = "foo-"
+  val JIRA_PATTERN = Pattern.compile("(?i)(" + JIRA_PROJECT + "\\d{1,5})")
+  val ECHO_PATTERN = Pattern.compile("(?i)echo[ ]+(.+)")
 
   val jiraResolver: JiraResolver = new JiraResolver()
 
@@ -27,17 +29,20 @@ class IrcBotListener(var server: String, var channel: String) extends ListenerAd
   }
 
 
-  override def onGenericMessage(event: GenericMessageEvent[IrcLogBot]) {
+//  override def onGenericMessage(event: GenericMessageEvent[IrcLogBot]) {
+  override def onMessage(event: MessageEvent[IrcLogBot]) {
     if (event.getUser().getNick().toLowerCase().contains("bot")) {
       return
     }
+    // do nothing, just log the message
+    logger.info(s"${event.getUser.getNick}: ${event.getMessage}")
 
-    val bot = event.getBot()
-    event.respond("bot" + event.getMessage)
+//    val bot = event.getBot()
+//    event.respond("bot" + event.getMessage)
     //        if (!bot.getNick().equals(bot.getName())) {
     //            bot.changeNick(bot.getName())
     //        }
-    val message: String = event.getMessage()
+//    val message: String = event.getMessage()
 
     //
     //        // react to Jira bugs in the messages
@@ -68,8 +73,8 @@ class IrcBotListener(var server: String, var channel: String) extends ListenerAd
   }
 
 
-  override def onPrivateMessage(privateMessageEvent: PrivateMessageEvent[IrcLogBot]) {
-    privateMessageEvent.respond("pico " + privateMessageEvent.getUser + " " + privateMessageEvent.getMessage)
+  override def onPrivateMessage(msg: PrivateMessageEvent[IrcLogBot]) {
+    msg.respond(s"Hey ${msg.getUser.getNick}, you'll find the logs on http://$host/logs")
   }
 
 
@@ -101,5 +106,7 @@ class IrcBotListener(var server: String, var channel: String) extends ListenerAd
 //  override def onNickChange(event: NickChangeEvent[IrcLogBot]) =
   //Store the result
 //    names.put(event.getOldNick(), event.getNewNick())
+
+  def host = InetAddress.getLocalHost.getHostAddress
 
 }
