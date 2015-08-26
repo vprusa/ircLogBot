@@ -35,7 +35,7 @@ class IrcBotListener(var server: String, var channel: String) extends ListenerAd
       return
     }
     // do nothing, just log the message
-    logger.info(s"${event.getUser.getNick}: ${event.getMessage}")
+    logger.info(s"${event.getUser.getNick} ${event.getMessage}")
 
 //    val bot = event.getBot()
 //    event.respond("bot" + event.getMessage)

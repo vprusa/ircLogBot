@@ -51,6 +51,8 @@ function getData(searchPhrase) {
 	$.ajax({
 		type: 'GET',
 		url: 'latestIrcLog.json',
+		isLocal: true,
+		dataType: 'text',
 		ifModified: !!searchPhrase,
 		success: function(jsonString) {
 			var entries;

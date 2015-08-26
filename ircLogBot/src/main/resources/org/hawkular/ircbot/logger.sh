@@ -5,7 +5,8 @@
 #  exit 1
 #}
 _INPUT_FILE="/tmp/ircLog.log"
-#_LOG_FILE="/var/www/html/logs/latest.html"
+_LOG_TEMPLATE_HTML_FILE="/var/www/html/logs/logTemplate.html"
+_LOG_HTML_FILE="/var/www/html/logs/latest.html"
 _LOG_FILE="/var/www/html/logs/latestIrcLog.json"
 _CHANNEL=${IRC_CHANNEL:="##foo"}
 #_STYLES="<style>.name {color: red;}</style>"
@@ -28,8 +29,8 @@ _CHANNEL=${IRC_CHANNEL:="##foo"}
 
 # and this creates the dynamic single page app
 ##############################################
-# initial copy
-echo "{\"entries\" :[\""`cat $_INPUT_FILE | awk '{$1="{\"time\":\""$1; $3=$3"\","; $4=""; $5="\"name\":\""$5"\","; $6="\"message\":\""$6"\"}"; print $0}' | sed 's/\(https\?:\/\/[^ <]*\)/<a href=\1>\1<\/a>/'`"," > $_LOG_FILE
+echo "{\"entries\" :[" > $_LOG_FILE
 
 # listen and add new changes
-tail -f $_INPUT_FILE | awk '{$1="{\"time\":\""$1; $3=$3"\","; $4=""; $5="\"name\":\""$5"\","; $6="\"message\":\""$6"\"},"; print $0;system("")}' | sed 's/\(https\?:\/\/[^ <]*\)/<a href=\1>\1<\/a>/' >> $_LOG_FILE
+tail -f $_INPUT_FILE | awk '{$1="{\"time\":\""$1; $3=$3"\","; $4=""; $5="\"name\":\""$5"\",\"message\":\""; print $0"\"},";system("")}' | sed -u 's/\(https\?:\/\/[^ <]*\)/<a href=\1>\1<\/a>/' >> $_LOG_FILE
+
