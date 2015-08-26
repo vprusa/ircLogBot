@@ -1,6 +1,6 @@
 #!/bin/bash
 LOG_FILE_RAW="/tmp/ircLog.log"
-LOG_FILE_LATEST="/var/www/html/logs/latestIrcLog"
+LOG_FILE_LATEST="/var/www/html/logs/latestIrcLog.json"
 
 mv $LOG_FILE_LATEST /var/www/html/logs/ircLog-$( date +%F ) && echo "copying old log file.." && \
 kill $(ps aux | grep 'logger.sh' | awk '{print $2}') && echo "killing the logging process.." && \
