@@ -1,5 +1,5 @@
 ifdef::env-github[]
-[link=https://travis-ci.org/hawkular/hawkular]
+image:https://travis-ci.org/Jiri-Kremser/ircLogBot.svg?branch=master["Build Status", link="https://travis-ci.org/Jiri-Kremser/ircLogBot"]{nbsp}
 image:https://badge.imagelayers.io/jkremser/irclogbot:latest.svg["Docker Image Layers", link="https://imagelayers.io/?images=jkremser/irclogbot:latest"]
 endif::[]
 
