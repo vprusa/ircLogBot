@@ -1,3 +1,8 @@
+ifdef::env-github[]
+[link=https://travis-ci.org/hawkular/hawkular]
+image:https://badge.imagelayers.io/jkremser/irclogbot:latest.svg["Docker Image Layers", link="https://imagelayers.io/?images=jkremser/irclogbot:latest"]
+endif::[]
+
 For trying out, just run:
 
 ```bash
